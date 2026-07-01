@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   title: "Fylex",
   description: "It's your time. Coming soon.",
   icons: {
-    icon: "/fylex-waitlist/favicon.png",
+    icon: "/favicon.png",
   },
 };
 

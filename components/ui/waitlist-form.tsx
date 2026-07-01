@@ -36,7 +36,7 @@ export function WaitlistForm() {
     }
     
     try {
-      const response = await fetch('/fylex-waitlist/api/register', {
+      const response = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

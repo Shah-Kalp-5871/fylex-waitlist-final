@@ -32,9 +32,9 @@ interface WatchPuzzleProps {
 }
 
 export function WatchPuzzle({
-  imageUrl = "/fylex-waitlist/fylex-watch.jpg",
-  title = "The Fylex Masterpieces",
-  description = "Drag the strips up or down to reassemble the watch.",
+  imageUrl = "/fylex-watch.jpg",
+  title = "The Masterpiece",
+  description = "Solve the puzzle to reveal the watch.",
 }: WatchPuzzleProps) {
   const [order, setOrder] = useState<number[]>(buildSolved());
   const [isMounted, setIsMounted] = useState(false);

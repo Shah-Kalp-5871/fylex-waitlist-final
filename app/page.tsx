@@ -90,7 +90,7 @@ const bentoMediaItems = [
     type: "image",
     title: "Heritage Collection",
     desc: "The timeless classic",
-    url: "fylex-waitlist/fylex-watch.jpg",
+    url: "/fylex-watch.jpg",
     span: "col-span-1 row-span-4 sm:col-span-1 sm:row-span-2 md:col-span-1 md:row-span-3",
   },
   {
@@ -176,7 +176,7 @@ export default function Home() {
         <nav className="pointer-events-auto flex flex-col items-center justify-center group cursor-pointer">
           <div className="bg-black/20 backdrop-blur-xl border border-white/10 p-3 md:p-4 rounded-full shadow-[0_0_30px_rgba(255,255,255,0.05)] transition-all duration-700 ease-out hover:bg-white/5 hover:border-white/20 hover:scale-110">
             <img
-              src="/fylex-waitlist/icon.png"
+              src="/icon.png"
               alt="Fylex Logo"
               className="w-16 h-16 md:w-16 md:h-16 object-contain transition-all duration-700 ease-out group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]"
             />
@@ -266,7 +266,7 @@ export default function Home() {
         {/* Watch Puzzle Section */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         <WatchPuzzle
-          imageUrl="/fylex-waitlist/fylex-watch.jpg"
+          imageUrl="/fylex-watch.jpg"
           title="The Fylex Masterpieces"
           description="Drag & drop the pieces into place — or tap a tile, then tap its destination — to reveal the watch."
         />
@@ -319,7 +319,7 @@ export default function Home() {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-zinc-500/50 to-transparent"></div>
         <div className="max-w-7xl mx-auto px-6 flex flex-col items-center justify-center gap-6 relative z-10">
           <img
-            src="/fylex-waitlist/icon.png"
+            src="/icon.png"
             alt="Fylex Logo"
             className="w-10 h-10 object-contain opacity-50 hover:opacity-100 transition-opacity duration-500"
           />
