@@ -65,7 +65,8 @@ export default async function AdminDashboard() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-400">
                       {new Date(entry.created_at).toLocaleString('en-US', {
                         dateStyle: 'medium',
-                        timeStyle: 'short'
+                        timeStyle: 'short',
+                        timeZone: 'Asia/Kolkata'
                       })}
                     </td>
                   </tr>
