@@ -267,7 +267,7 @@ export default function Home() {
         {/* Watch Puzzle Section */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         <WatchPuzzle
-          imageUrl="/puzzel.png"
+          imageUrl="/newpuzzelimg.jpeg"
           title="The Fylex Masterpieces"
           description="Drag & drop the pieces into place — or tap a tile, then tap its destination — to reveal the watch."
         />
