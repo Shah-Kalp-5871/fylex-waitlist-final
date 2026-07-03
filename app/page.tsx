@@ -264,11 +264,19 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Watch Puzzle Section */}
+        {/* Watch Puzzle Section - Option 1 */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         <WatchPuzzle
-          imageUrl="/newpuzzelimg.jpeg"
-          title="The Fylex Masterpieces"
+          imageUrl="/fylex-watch.png"
+          title="The Fylex Masterpieces (Option 1)"
+          description="Drag & drop the pieces into place — or tap a tile, then tap its destination — to reveal the watch."
+        />
+
+        {/* Watch Puzzle Section - Option 2 */}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <WatchPuzzle
+          imageUrl="/fylex-watch-2.png"
+          title="The Fylex Masterpieces (Option 2)"
           description="Drag & drop the pieces into place — or tap a tile, then tap its destination — to reveal the watch."
         />
         
