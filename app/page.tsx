@@ -117,8 +117,8 @@ export default function Home() {
           {/* The Experience of Choices */}
           <section className="w-full py-32 px-6 border-t border-white/5 bg-zinc-950">
             <div className="max-w-7xl mx-auto flex flex-col items-center">
-              <h2 className="text-3xl md:text-5xl font-serif text-white leading-tight mb-4 text-center">
-                The dial colors you choose represent different motivations.
+              <h2 className="text-3xl md:text-5xl font-serif text-white leading-tight mb-4 text-center capitalize">
+                The experience of choices
               </h2>
               <p className="text-zinc-500 mb-12 text-center uppercase tracking-widest text-xs">Select a dial to reveal your persona</p>
               
@@ -164,7 +164,7 @@ export default function Home() {
           </section>
 
           {/* Heritage Section */}
-          <section className="w-full bg-black py-32 px-6 border-t border-white/5 relative overflow-hidden">
+          <section className="hidden w-full bg-black py-32 px-6 border-t border-white/5 relative overflow-hidden">
             {/* Background ambient glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/[0.02] rounded-full blur-[120px] pointer-events-none"></div>
 
@@ -280,6 +280,7 @@ export default function Home() {
               
               <button 
                 onClick={scrollToTop}
+                suppressHydrationWarning
                 className="fylex-cta px-10 py-5 group flex items-center gap-3 transition-all duration-300 hover:scale-[1.02] shadow-[0_0_30px_rgba(255,255,255,0.1)]"
               >
                 Join the Waitlist
