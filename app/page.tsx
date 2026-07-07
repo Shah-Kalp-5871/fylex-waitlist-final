@@ -20,13 +20,14 @@ export default function Home() {
     requestAnimationFrame(raf)
   }, [])
 
-  const [activeChoice, setActiveChoice] = useState<number | null>(null);
+  const [activeVote, setActiveVote] = useState<number | null>(null);
 
-  const choices = [
-    { id: 1, title: "Olive Green", persona: "The Builder", desc: "steady, grounded, dependable", img: "https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg" },
-    { id: 2, title: "Dark Blue", persona: "The Thinker", desc: "wise, reflective, trustworthy", img: "https://images.pexels.com/photos/280250/pexels-photo-280250.jpeg" },
-    { id: 3, title: "Silver", persona: "The Explorer", desc: "curious, adaptable, innovative", img: "https://images.pexels.com/photos/380782/pexels-photo-380782.jpeg" },
-    { id: 4, title: "Gold", persona: "The Achiever", desc: "ambitious, confident, inspiring", img: "https://images.pexels.com/photos/2113994/pexels-photo-2113994.jpeg" },
+  const voteOptions = [
+    { id: 1, title: "Black", votes: "12%", img: "https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg" },
+    { id: 2, title: "Gold", votes: "24%", img: "https://images.pexels.com/photos/2113994/pexels-photo-2113994.jpeg" },
+    { id: 3, title: "Blue", votes: "56%", img: "https://images.pexels.com/photos/280250/pexels-photo-280250.jpeg" },
+    { id: 4, title: "Green", votes: "5%", img: "https://images.pexels.com/photos/380782/pexels-photo-380782.jpeg" },
+    { id: 5, title: "Silver", votes: "3%", img: "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg" },
   ];
 
   const scrollToTop = () => {
@@ -114,47 +115,40 @@ export default function Home() {
             </div>
           </section>
 
-          {/* The Experience of Choices */}
+          {/* Vote Your Pick Section */}
           <section className="w-full py-32 px-6 border-t border-white/5 bg-zinc-950">
             <div className="max-w-7xl mx-auto flex flex-col items-center">
-              <h2 className="text-3xl md:text-5xl font-serif text-white leading-tight mb-4 text-center capitalize">
-                The experience of choices
+              <h2 className="text-3xl md:text-5xl font-sans font-medium text-white leading-tight mb-16 text-center lowercase">
+                vote your pick
               </h2>
-              <p className="text-zinc-500 mb-12 text-center uppercase tracking-widest text-xs">Select a dial to reveal your persona</p>
               
               <div className="flex flex-col md:flex-row h-[600px] md:h-[500px] lg:h-[600px] w-full gap-2 md:gap-4">
-                {choices.map((choice, index) => {
-                  const isActive = activeChoice === index;
+                {voteOptions.map((option, index) => {
+                  const isActive = activeVote === index;
                   return (
                     <div
-                      key={choice.id}
-                      onClick={() => setActiveChoice(isActive ? null : index)}
+                      key={option.id}
+                      onClick={() => setActiveVote(isActive ? null : index)}
                       className={`relative overflow-hidden rounded-2xl md:rounded-3xl transition-[flex] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer group ${
-                        isActive ? "flex-[5] md:flex-[4]" : activeChoice === null ? "flex-1" : "flex-[0.5] md:flex-[0.8]"
+                        isActive ? "flex-[5] md:flex-[4]" : activeVote === null ? "flex-1" : "flex-[0.5] md:flex-[0.8]"
                       }`}
                     >
                       <img 
-                        src={choice.img} 
-                        alt={choice.title} 
+                        src={option.img} 
+                        alt={option.title} 
                         className={`absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ${isActive ? 'scale-105' : 'scale-100 group-hover:scale-105'}`} 
                       />
                       <div className={`absolute inset-0 transition-opacity duration-700 ${isActive ? 'bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-100' : 'bg-black/30 group-hover:bg-black/10'}`} />
                       
-                      {/* Content visible when active */}
-                      <div className={`absolute bottom-0 left-0 p-6 md:p-8 w-full md:w-2/3 lg:w-1/2 transition-all duration-700 delay-100 transform ${isActive ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 pointer-events-none'}`}>
-                        <div className="backdrop-blur-md bg-black/30 p-6 rounded-2xl border border-white/10 shadow-2xl">
-                          <h3 className="text-3xl font-serif text-white mb-1">{choice.title}</h3>
-                          <p className="text-xl text-zinc-300 font-serif italic mb-4">{choice.persona}</p>
-                          <p className="text-zinc-400 font-light leading-relaxed">{choice.desc}</p>
+                      {/* Small white box for inactive items */}
+                      <div className={`absolute bottom-6 right-6 w-8 h-4 bg-white/70 transition-all duration-700 ${isActive ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}></div>
+
+                      {/* Vote percentage box when active */}
+                      <div className={`absolute bottom-6 right-6 transition-all duration-700 delay-100 transform ${isActive ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 pointer-events-none'}`}>
+                        <div className="bg-white text-zinc-900 px-3 py-3 shadow-2xl flex flex-col items-center justify-center min-w-[3.5rem]">
+                          <span className="text-xl md:text-2xl font-bold leading-none">{option.votes.replace('%', '')}</span>
+                          <span className="text-sm md:text-base font-semibold leading-none mt-1">%</span>
                         </div>
-                      </div>
-                      
-                      {/* Vertical/Horizontal title when inactive */}
-                      <div className={`absolute transition-all duration-700 ${isActive ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'} 
-                          bottom-4 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-6 md:bottom-12 md:rotate-[-90deg] md:origin-left whitespace-nowrap`}>
-                        <span className="text-white font-serif tracking-[0.2em] md:tracking-[0.3em] uppercase text-xs md:text-sm drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] font-medium">
-                          {choice.title}
-                        </span>
                       </div>
                     </div>
                   )
@@ -162,6 +156,7 @@ export default function Home() {
               </div>
             </div>
           </section>
+
 
           {/* Heritage Section */}
           <section className="hidden w-full bg-black py-32 px-6 border-t border-white/5 relative overflow-hidden">
