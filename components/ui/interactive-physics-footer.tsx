@@ -11,7 +11,17 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { debounce } from "lodash";
+function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  const debounced = function (...args: Parameters<T>) {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+  debounced.cancel = () => {
+    if (timeout) clearTimeout(timeout);
+  };
+  return debounced;
+}
 import Matter, {
   Bodies,
   Common,

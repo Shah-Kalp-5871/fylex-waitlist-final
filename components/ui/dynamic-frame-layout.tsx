@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { motion } from "framer-motion"
+import React, { useRef, useState, useEffect } from "react"
+import Image from "next/image"
+import { motion, AnimatePresence } from "framer-motion"
 
 export interface Frame {
   id: number
@@ -100,10 +101,11 @@ function FrameComponent({
                 ref={videoRef}
               />
             ) : (
-              <img
-                className={`w-full h-full object-cover transition-all duration-500 ${isHovered ? "brightness-110 scale-105" : "brightness-50 grayscale"}`}
+              <Image
                 src={media}
                 alt="Showcase Media"
+                fill
+                className={`object-cover transition-all duration-500 ${isHovered ? "brightness-110 scale-105" : "brightness-50 grayscale"}`}
               />
             )}
           </div>

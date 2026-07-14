@@ -54,7 +54,7 @@ export default async function AdminDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-800">
-                {entries.map((entry) => (
+                {entries.map((entry: any) => (
                   <tr key={entry.id} className="hover:bg-neutral-800/50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-300">
                       #{entry.id}

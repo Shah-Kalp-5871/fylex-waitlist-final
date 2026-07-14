@@ -9,18 +9,18 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model Waitlist {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   phone      String   @unique
   created_at DateTime @default(now())
 }
 
 model Vote {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   ip         String   @unique      // one vote per IP address
   watchId    Int                   // 1=OliveGreen, 2=DarkBlue, 3=Silver, 4=Gold
   created_at DateTime @default(now())

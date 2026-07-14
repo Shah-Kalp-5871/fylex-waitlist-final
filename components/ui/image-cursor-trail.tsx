@@ -1,6 +1,7 @@
 "use client"
 
 import React, { createRef, useRef, type ReactNode } from "react"
+import Image from "next/image"
 
 function cn(...classes: (string | undefined | null | false)[]) {
   return classes.filter(Boolean).join(" ")
@@ -86,7 +87,7 @@ export function ImageCursorTrail({
       )}
     >
       {items.map((item, index) => (
-        <img
+        <Image
           key={index}
           className={cn(
             "opacity-0 pointer-events-none absolute -translate-x-[50%] -translate-y-[50%] scale-0 rounded-2xl object-cover transition-all duration-300 data-[status='active']:scale-100 data-[status='active']:opacity-100 data-[status='active']:duration-500 shadow-2xl border border-white/10",
@@ -97,6 +98,8 @@ export function ImageCursorTrail({
           src={item}
           alt={`image-${index}`}
           ref={refs.current[index]}
+          width={400}
+          height={400}
         />
       ))}
       {children}

@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import { useState, createContext, useContext } from "react";
 import {
   motion,
@@ -79,6 +80,8 @@ function ImageComparison({
   );
 }
 
+const MotionImage = motion.create(Image);
+
 const ImageComparisonImage = ({
   className,
   alt,
@@ -98,10 +101,11 @@ const ImageComparisonImage = ({
   );
 
   return (
-    <motion.img
+    <MotionImage
       src={src}
       alt={alt}
-      className={cn("absolute inset-0 h-full w-full object-cover", className)}
+      fill
+      className={cn("absolute inset-0 object-cover", className)}
       style={{
         clipPath: position === "left" ? leftClipPath : rightClipPath
       }}

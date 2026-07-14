@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import Image from "next/image";
 
 const images = [
   "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
@@ -37,10 +38,11 @@ const ExpandOnHover = () => {
                     }}
                     onMouseEnter={() => setExpandedImage(idx + 1)}
                   >
-                    <img
-                      className="w-full h-full object-cover"
+                    <Image
+                      className="object-cover"
                       src={src}
                       alt={`Image ${idx + 1}`}
+                      fill
                     />
                   </div>
                 ))}

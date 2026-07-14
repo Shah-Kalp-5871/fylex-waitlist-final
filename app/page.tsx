@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import Lenis from "@studio-freight/lenis"
 import { WaitlistForm } from "@/components/ui/waitlist-form"
 import {
@@ -9,6 +9,9 @@ import {
   ImageComparisonSlider
 } from "@/components/ui/image-comparison"
 import { motion } from "framer-motion"
+import Image from "next/image"
+import { VoteYourPick } from "@/components/VoteYourPick"
+import { ExperienceOfChoice } from "@/components/ExperienceOfChoice"
 
 export default function Home() {
   useEffect(() => {
@@ -20,66 +23,6 @@ export default function Home() {
     requestAnimationFrame(raf)
   }, [])
 
-  // ─── Vote section state ──────────────────────────────────────────────────
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [hasVoted, setHasVoted] = useState(false);
-  const [userPick, setUserPick] = useState<number | null>(null);
-  const [voteData, setVoteData] = useState<Record<number, number> | null>(null);
-  const [isVoting, setIsVoting] = useState(false);
-  const [voteCheckDone, setVoteCheckDone] = useState(false);
-  // ─────────────────────────────────────────────────────────────────────────
-
-  const voteOptions = [
-    { id: 1, title: "Olive Green",  persona: "The Builder",  tagline: "steady, grounded, dependable",   color: "#6B7C4A", img: "https://images.pexels.com/photos/380782/pexels-photo-380782.jpeg" },
-    { id: 2, title: "Dark Blue",    persona: "The Thinker",  tagline: "wise, reflective, trustworthy",   color: "#2C3E6B", img: "https://images.pexels.com/photos/280250/pexels-photo-280250.jpeg" },
-    { id: 3, title: "Silver",       persona: "The Explorer", tagline: "curious, adaptable, innovative",  color: "#8A9BA8", img: "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg" },
-    { id: 4, title: "Gold",         persona: "The Achiever", tagline: "ambitious, confident, inspiring",  color: "#C9A84C", img: "https://images.pexels.com/photos/2113994/pexels-photo-2113994.jpeg" },
-  ];
-
-  // Silent IP check on mount — no user input needed
-  useEffect(() => {
-    fetch('/api/vote')
-      .then(r => r.json())
-      .then(data => {
-        if (data.hasVoted) {
-          setUserPick(data.watchId);
-          setVoteData(data.percentages);
-          setHasVoted(true);
-        }
-      })
-      .catch(() => {}) // silently ignore — user can still vote if check fails
-      .finally(() => setVoteCheckDone(true));
-  }, []);
-
-  const handleSelect = (id: number) => {
-    if (hasVoted || isVoting) return;
-    setSelectedId(prev => prev === id ? null : id);
-  };
-
-  const handleVote = async () => {
-    if (!selectedId || hasVoted || isVoting) return;
-    setIsVoting(true);
-    setUserPick(selectedId);
-    try {
-      const res = await fetch('/api/vote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ watchId: selectedId }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        // Use the watchId the server actually stored (first-vote-wins)
-        setUserPick(data.watchId);
-        setVoteData(data.percentages);
-        setHasVoted(true);
-      }
-    } catch (e) {
-      console.error('Voting failed', e);
-    } finally {
-      setIsVoting(false);
-    }
-  };
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
@@ -90,9 +33,12 @@ export default function Home() {
       <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
         <nav className="pointer-events-auto flex flex-col items-center justify-center group cursor-pointer">
           <div className="bg-black/20 backdrop-blur-xl border border-white/10 p-3 md:p-4 rounded-full shadow-[0_0_30px_rgba(255,255,255,0.05)] transition-all duration-700 ease-out hover:bg-white/5 hover:border-white/20 hover:scale-110">
-            <img
+            <Image
               src="/icon.png"
               alt="Fylex Logo"
+              width={64}
+              height={64}
+              priority
               className="w-16 h-16 md:w-16 md:h-16 object-contain transition-all duration-700 ease-out group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]"
             />
           </div>
@@ -142,16 +88,16 @@ export default function Home() {
               <h2 className="text-zinc-500 text-sm font-bold tracking-[0.3em] uppercase mb-16 text-center">The Belief</h2>
               
               <div className="relative group">
-                <ImageComparison className="aspect-square md:aspect-[16/9] w-full rounded-3xl shadow-[0_0_50px_rgba(255,255,255,0.05)] border border-white/10" enableHover>
+                <ImageComparison className="aspect-[3/4] max-w-xl mx-auto w-full rounded-3xl shadow-[0_0_50px_rgba(255,255,255,0.05)] border border-white/10 bg-black" enableHover>
                   <ImageComparisonImage
-                    src="https://images.pexels.com/photos/277390/pexels-photo-277390.jpeg"
-                    className="opacity-90"
+                    src="/assets/swipe/2.webp"
+                    className="opacity-95 object-contain sm:object-cover object-center"
                     alt="First Image"
                     position="left"
                   />
                   <ImageComparisonImage
-                    src="https://images.pexels.com/photos/280250/pexels-photo-280250.jpeg"
-                    className=""
+                    src="/assets/swipe/1.webp"
+                    className="object-contain sm:object-cover object-center"
                     alt="Second Image"
                     position="right"
                   />
@@ -165,114 +111,11 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Vote Your Pick Section */}
-          <section className="w-full py-24 px-6 border-t border-white/5 bg-zinc-950">
-            <div className="max-w-7xl mx-auto flex flex-col items-center">
-              <h2 className="text-3xl md:text-5xl font-sans font-medium text-white leading-tight mb-4 text-center lowercase">
-                vote your pick
-              </h2>
-              <p className="text-white/40 text-sm md:text-base mb-16 text-center">
-                {!voteCheckDone
-                  ? '\u00a0'
-                  : !hasVoted
-                    ? (selectedId ? 'Lock in your choice below \u2193' : 'Choose the dial that speaks to you')
-                    : 'The results are in'}
-              </p>
+          {/* Section 1: The Experience of Choice */}
+          <ExperienceOfChoice />
 
-              {/* Already voted notice */}
-              {voteCheckDone && hasVoted && userPick && (
-                <p className="text-white/25 text-[10px] uppercase tracking-widest mb-6 -mt-10">
-                  You already voted from this device
-                </p>
-              )}
-
-              {/* Main accordion columns */}
-              <div
-                className={`flex flex-row w-full gap-2 md:gap-3 transition-all duration-700 ${
-                  !voteCheckDone ? 'opacity-0' : 'opacity-100'
-                }`}
-                style={{ height: hasVoted ? '420px' : '560px' }}
-              >
-                {voteOptions.map((option) => {
-                  const isSelected = selectedId === option.id;
-                  const isUserPick = userPick === option.id;
-                  const percentage = voteData ? (voteData[option.id] ?? 0) : 0;
-                  const isExpanded = !hasVoted && isSelected;
-                  const isSmall = !hasVoted && selectedId !== null && !isSelected;
-
-                  return (
-                    <div
-                      key={option.id}
-                      onClick={() => handleSelect(option.id)}
-                      style={{
-                        flex: hasVoted ? '1' : isExpanded ? '4' : isSmall ? '0.5' : '1',
-                        transition: 'flex 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
-                      }}
-                      className={`relative overflow-hidden rounded-2xl md:rounded-3xl cursor-pointer group border-2 transition-colors duration-500 ${
-                        isExpanded ? 'border-white/20' :
-                        hasVoted && isUserPick ? 'border-white/30' : 'border-transparent'
-                      }`}
-                    >
-                      {/* Watch image */}
-                      <img
-                        src={option.img}
-                        alt={option.title}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-
-                      {/* Gradient overlay */}
-                      <div className={`absolute inset-0 transition-all duration-500 ${
-                        isExpanded ? 'bg-gradient-to-t from-black/80 via-black/30 to-black/10' :
-                        hasVoted ? 'bg-black/60' : 'bg-black/40'
-                      }`} />
-
-                      {/* Expanded: Persona card sliding up from bottom */}
-                      <div className={`absolute bottom-0 left-0 right-0 p-5 md:p-7 transition-all duration-500 transform ${
-                        isExpanded ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0 pointer-events-none'
-                      }`}>
-                        <div className="mb-3 h-px w-8" style={{ backgroundColor: option.color }} />
-                        <p className="text-white/50 text-xs uppercase tracking-[0.2em] mb-1">{option.title}</p>
-                        <h3 className="text-white text-xl md:text-2xl font-semibold leading-tight mb-2">{option.persona}</h3>
-                        <p className="text-white/60 text-xs md:text-sm italic">{option.tagline}</p>
-                      </div>
-
-                      {/* Post-vote: percentage + persona */}
-                      <div className={`absolute inset-0 flex flex-col items-center justify-center gap-2 transition-all duration-700 px-2 ${
-                        hasVoted ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                      }`}>
-                        <span className="text-2xl md:text-3xl font-bold text-white drop-shadow-lg tabular-nums">{percentage}%</span>
-                        <span className="text-[9px] md:text-[10px] text-white/50 uppercase tracking-widest text-center leading-tight">{option.persona}</span>
-                        {isUserPick && (
-                          <span className="mt-1 px-2 py-0.5 text-[8px] md:text-[10px] font-semibold uppercase tracking-widest rounded-full bg-white/20 text-white border border-white/30 backdrop-blur-sm whitespace-nowrap">
-                            Your Pick
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Confirm Vote CTA */}
-              <div
-                className={`w-full flex justify-center transition-all duration-500 overflow-hidden ${
-                  selectedId && !hasVoted ? 'mt-8 max-h-24 opacity-100' : 'mt-0 max-h-0 opacity-0 pointer-events-none'
-                }`}
-              >
-                <button
-                  onClick={handleVote}
-                  disabled={isVoting}
-                  className="group relative px-10 py-4 bg-white text-zinc-900 text-sm uppercase tracking-widest font-semibold rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <span className="relative z-10">{isVoting ? 'Casting Vote...' : 'Lock in my pick'}</span>
-                  <span className="absolute inset-0 bg-zinc-900 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
-                  <span className="absolute inset-0 z-[5] text-white flex items-center justify-center text-sm uppercase tracking-widest font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">{isVoting ? 'Casting Vote...' : 'Lock in my pick'}</span>
-                </button>
-              </div>
-
-            </div>
-          </section>
-
+          {/* Section 2: Vote Your Pick Section */}
+          <VoteYourPick />
 
           {/* Heritage Section */}
           <section className="hidden w-full bg-black py-32 px-6 border-t border-white/5 relative overflow-hidden">
@@ -406,9 +249,11 @@ export default function Home() {
           <footer className="w-full pt-16 pb-8 bg-black border-t border-white/5 relative overflow-hidden z-20">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-zinc-500/50 to-transparent"></div>
             <div className="max-w-7xl mx-auto px-6 flex flex-col items-center justify-center gap-6 relative z-10">
-              <img
+              <Image
                 src="/fylex_logo_name.png"
                 alt="Fylex Logo"
+                width={224}
+                height={80}
                 className="w-40 md:w-56 object-contain opacity-60 hover:opacity-100 transition-opacity duration-500"
               />
               <p className="text-zinc-700 tracking-[0.2em] uppercase text-[10px] mt-4">

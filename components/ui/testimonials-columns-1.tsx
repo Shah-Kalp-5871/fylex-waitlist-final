@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const testimonials = [
@@ -86,7 +87,7 @@ export const TestimonialsColumn = (props: {
                 <div className="p-10 rounded-3xl border border-white/10 shadow-lg shadow-black/50 bg-zinc-900/50 backdrop-blur-sm max-w-xs w-full" key={i}>
                   <div className="text-zinc-300">{text}</div>
                   <div className="flex items-center gap-2 mt-5">
-                    <img
+                    <Image
                       width={40}
                       height={40}
                       src={image}

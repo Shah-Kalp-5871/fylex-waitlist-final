@@ -1,7 +1,13 @@
 "use strict";
 
 import React, { useRef } from "react";
-import { InteractivePhysicsFooter, PhysicsItem } from "@/components/ui/interactive-physics-footer";
+import { PhysicsItem } from "@/components/ui/interactive-physics-footer";
+import dynamic from "next/dynamic";
+
+const InteractivePhysicsFooter = dynamic(
+  () => import("@/components/ui/interactive-physics-footer").then((mod) => mod.InteractivePhysicsFooter),
+  { ssr: false }
+);
 import { ArrowRight, Globe, Mail, MessageCircle, Cpu, Layers, Sparkles, Command } from "lucide-react";
 
 export function FooterDemo() {

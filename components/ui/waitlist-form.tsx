@@ -3,28 +3,28 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, AlertCircle } from "lucide-react";
-import Swal from 'sweetalert2';
 
-// Validates a 10-digit Indian mobile number (or any 10-digit number)
+// Validates a 10-digit Indian mobile number
 function validatePhone(phone: string): string | null {
   const stripped = phone.replace(/\D/g, "");
   if (!stripped) return "Please enter your mobile number.";
-  if (stripped.length < 10) return "Enter a valid 10-digit mobile number.";
-  if (stripped.length > 12) return "Number looks too long. Please check.";
+  if (stripped.length !== 10) return "Mobile number must be exactly 10 digits.";
+  if (!/^[6-9]/.test(stripped)) return "Enter a valid Indian mobile number.";
   return null;
 }
 
 export function WaitlistForm() {
   const [phone, setPhone] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isFocused, setIsFocused] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Allow only digits, spaces, dashes, plus sign
-    const val = e.target.value.replace(/[^\d\s\-+]/g, "");
+    // Allow only digits and limit to 10 characters
+    const val = e.target.value.replace(/\D/g, "").slice(0, 10);
     setPhone(val);
     if (error) setError(null); // clear error on type
+    if (success) setSuccess(null); // clear success on type
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,19 +44,18 @@ export function WaitlistForm() {
         body: JSON.stringify({ phone: phone.replace(/\D/g, "") }),
       });
 
+      if (response.status === 409) {
+        setPhone("");
+        setSuccess("You are already registered.");
+        return;
+      }
+
       if (!response.ok) {
         throw new Error('Registration failed');
       }
 
       setPhone("");
-      Swal.fire({
-        title: 'Success!',
-        text: 'Your spot is secured. We will notify you the moment our doors open.',
-        icon: 'success',
-        background: '#18181b', // dark background matching site
-        color: '#ffffff', // white text
-        confirmButtonColor: '#10b981',
-      });
+      setSuccess("Success! Your spot is secured. We will notify you the moment our doors open.");
     } catch (err) {
       console.error(err);
       setError("Failed to register. Please try again.");
@@ -66,7 +65,6 @@ export function WaitlistForm() {
   return (
     <div className="w-full max-w-md mx-auto mt-8">
       <AnimatePresence mode="wait">
-        {!isSubmitted ? (
           <motion.div
             key="form"
             initial={{ opacity: 0, y: 10 }}
@@ -137,8 +135,22 @@ export function WaitlistForm() {
                 </motion.p>
               )}
             </AnimatePresence>
+            {/* Inline success */}
+            <AnimatePresence>
+              {success && (
+                <motion.p
+                  key="success"
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  className="flex items-center gap-1.5 text-emerald-400 text-xs px-4 mt-2"
+                >
+                  <Check className="w-3.5 h-3.5 shrink-0" />
+                  {success}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </motion.div>
-        ) : null}
       </AnimatePresence>
     </div>
   );

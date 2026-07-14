@@ -12,16 +12,33 @@ export async function POST(request: Request) {
       );
     }
 
+    const stripped = phone.replace(/\D/g, "");
+    if (stripped.length !== 10) {
+      return NextResponse.json(
+        { error: 'Mobile number must be exactly 10 digits' },
+        { status: 400 }
+      );
+    }
+    
+    if (!/^[6-9]/.test(stripped)) {
+      return NextResponse.json(
+        { error: 'Invalid Indian mobile number' },
+        { status: 400 }
+      );
+    }
+
     try {
       await prisma.waitlist.create({
-        data: { phone },
+        data: { phone: stripped },
       });
     } catch (e: any) {
-      // P2002 is Prisma's unique constraint violation error code
-      // We can ignore it if the phone number is already registered
-      if (e.code !== 'P2002') {
-        throw e;
+      if (e.code === 'P2002') {
+        return NextResponse.json(
+          { error: 'Already registered' },
+          { status: 409 }
+        );
       }
+      throw e;
     }
 
     return NextResponse.json(
